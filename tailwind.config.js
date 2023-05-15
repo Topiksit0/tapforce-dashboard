@@ -4,7 +4,7 @@ module.exports = {
   purge: {
     enabled: process.env.NODE_ENV === 'production',
     safeList: [],
-    content: ['./index.html', './src/**/*.tsx', './src/**/*.ts'],
+    content: ['./index.html', './src/**/*.tsx', './src/**/*.ts', "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",],
   },
   theme: {
     minWidth: {
