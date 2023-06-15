@@ -26,14 +26,6 @@ function Sidebar() {
                                 <UploadDataButton />    
                             </div>
                         </li>
-
-                        <li className="">
-                            <div className="mt-14 flex justify-center items-center">
-                                <button onClick={getUserlistData}>
-                                    <h1>TEST</h1>
-                                </button>
-                            </div>
-                        </li>
                     </div>
 
 

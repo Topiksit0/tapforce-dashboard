@@ -69,20 +69,23 @@ export async function getUserlistData() {
         const encontrados = jugador.encontrados;
         const puntos = jugador.puntos;
 
+        const formattedNumber = puntos.toLocaleString("en-US");
+        const formattedNumberWithDot = formattedNumber.split(',').join('.');
+
         for (let i = 0; i < compared[0].jugadores.length; i++) {
             if (compared[0].jugadores[i].username === username) {
                 var penultimoPuntos = compared[0].jugadores[i].puntos;
             }
         }
-       
+
         const delta = calculateDeltaUserList(puntos, penultimoPuntos);
         const deltaType = calculateDeltaTypeUserList(delta);
-        
+
         userStats.push({
             posicion: jugador.clasificacion,
             username: username,
             encontrados: encontrados,
-            puntos: puntos,
+            puntos: formattedNumberWithDot,
             delta: delta,
             deltaType: deltaType,
         });
@@ -197,12 +200,11 @@ function calculateDeltaUserList(currentPuntos: number, penultimoPuntos: number |
     if (penultimoPuntos === undefined) {
         return "N/A";
     }
-   
+
     const deltaValue = ((currentPuntos - penultimoPuntos) / penultimoPuntos) * 100;
     const deltaPercentage = deltaValue.toFixed(1);
-    const deltaSign = deltaValue >= 0 ? "+" : "-";
-    
-    return `${deltaSign}${deltaPercentage}%`;
+
+    return `${deltaPercentage}%`;
 }
 
 function calculateDeltaTypeUserList(delta: string): UserStats["deltaType"] {
@@ -212,15 +214,21 @@ function calculateDeltaTypeUserList(delta: string): UserStats["deltaType"] {
 
     const deltaValue = parseFloat(delta);
 
-    if (deltaValue > 10) {
-        return "moderateIncrease";
-    } else if (deltaValue < -10) {
-        return "moderateDecrease";
-    } else if (deltaValue > 0) {
-        return "increase";
-    } else if (deltaValue < 0) {
-        return "decrease";
-    } else {
+    if (deltaValue > 0) {
+        if (deltaValue < 20) {
+            return "moderateIncrease";
+        } else {
+            return "increase";
+        }
+    }
+    if (deltaValue < 0) {
+        if (deltaValue > -20) {
+            return "moderateDecrease";
+        } else {
+            return "decrease";
+        }
+    }
+    else {
         return "unchanged";
     }
 }
